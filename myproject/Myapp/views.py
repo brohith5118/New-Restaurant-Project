@@ -5,7 +5,15 @@ from .models import User,Category,Order,OrderItem,FoodItem
 # Create your views here.
 #login Page
 def home(request):
-    return render(request,'home.html')
+    user_id = request.session.get('user_id')
+    username = request.session.get('username')
+    role = request.session.get('role')
+
+    return render(request,'home.html',{
+        'user_id':user_id,
+        'username':username,
+        'role':role
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -20,10 +28,7 @@ def login_view(request):
             request.session['user_id'] = user.id
             request.session['role'] = user.role
 
-            if user.role == 'manager':
-                return redirect('/manager')
-            else:
-                return redirect('/menu')
+            return redirect('home')
 
         except User.DoesNotExist:
             return HttpResponse("Invalid credentials")
@@ -99,7 +104,17 @@ def categories(request):
 def food_items(request):
     if not is_logged_in(request):
         return redirect('/login_view')
-    return render(request,'food_items.html')
+    
+    if request.session.get('role') != 'manager':
+        return HttpResponse('Unauthorized')
+    
+    categories = Category.objects.all()
+    food_items = FoodItem.objects.select_related('category').all()
+
+    return render(request,'food_items.html',{
+        'categories':categories,
+        'food_items':food_items
+    })
 
 
 def room_view(request):
@@ -111,3 +126,47 @@ def orders_history(request):
     if not is_logged_in(request):
         return redirect('/login_view')
     return render(request,'orders_history.html')
+
+def add_food_item(request):
+    if not is_logged_in(request):
+        return redirect('/login_view')
+    
+    if request.session.get('role') != 'manager':
+        return HttpResponse('Unauthorized')
+    
+    return render(request,'add_food_item.html')
+
+def edit_item(request,id):
+    if not is_logged_in(request):
+        return redirect('/login_view')
+    item = FoodItem.objects.get(id=id)
+
+    if request.session.get('role') != 'manager':
+        return HttpResponse('Unauthorized')
+    
+    if request.method == 'POST':
+        item.name = request.POST.get('name')
+        item.price = request.POST.get('price')
+        item.description = request.POST.get('description')
+        item.is_available = request.POST.get('is_available') == 'on'
+
+        if(request.FILES.get('image')):
+            item.image = request.FILES.get("image")
+        
+        item.save()
+        return redirect('edit_item', id=id)
+
+    return render(request,'edit_item.html',{
+        'item':item
+    })
+
+
+def delete_item(request,id):
+    if not is_logged_in(request):
+        return redirect('/login_view')
+    
+    if request.session.get('role') != 'manager':
+        return HttpResponse('Unauthorized')
+    
+    # if request.method == 'POST'
+    return redirect('/food_items')

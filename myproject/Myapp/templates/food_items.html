@@ -4,9 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'Myapp/food_items.css' %}">
 </head>
 <body>
     <button onclick="history.back()">back</button>
     <h1>Food Items List</h1>
+    <form action="add_food_item">
+        <button type="submit">Add Food Item</button>
+    </form>
+
+    <div>
+        {% for category in categories %}
+            <h1>{{category.name}}</h1>
+            {% for food_item in food_items %}
+
+                {% if food_item.category.id == category.id %}
+                    <div>
+                        {% if food_item.image %}
+                            <img src="{{ food_item.image.url }}" class = 'image'>
+                        {% endif %}
+                        <h3>{{food_item.name}}</h3>
+                        <h3>{{food_item.price}}</h3>
+                    </div>
+                    <form action="edit_item/{{food_item.id}}">
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form action="delete_item/{{food_item.id}}">
+                        <button type="submit">Delete</button>
+                    </form>
+                {% endif %}
+
+            {% endfor %}
+        {% endfor %}
+    </div>
+
 </body>
 </html>

@@ -4,14 +4,14 @@ from django.utils import timezone
 # 👤 USER MODEL (Room + Manager)
 class User(models.Model):
     ROLE_CHOICES = [
-        ('room', 'Room'),
+        ('customer', 'customer'),
         ('manager', 'Manager'),
     ]
 
     username = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=50)
     room_number = models.IntegerField(null=True, blank=True)
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='room')
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='customer')
 
     def __str__(self):
         return f"{self.username} ({self.role})"

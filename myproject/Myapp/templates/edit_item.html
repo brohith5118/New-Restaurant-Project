@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'Myapp/edit_item.css' %}">
+</head>
+<body>
+    <h1>Edit Items Here</h1>
+
+    <img src="{{item.image.url}}" class = 'image'>
+    <form action="edit_item/{{item.id}}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" value="{{item.name}}" name="name">
+        <input type="text" value="{{item.price}}" name="price">
+        <input type="text" value="{{item.description}}" name="description">
+        <input type="file" name="image">
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>
