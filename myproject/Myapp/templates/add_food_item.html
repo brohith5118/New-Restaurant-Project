@@ -3,9 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Add Food Item</title>
 </head>
 <body>
+    <form action="/food_items"><button type="submit">Back</button></form>
+    
     <h1>Add Food Item Page</h1>
+
+    <form action="/add_food_item" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label>Food Name:</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label>Price:</label><br>
+        <input type="number" name="price" step="0.01" required><br><br>
+
+        <label>Description:</label><br>
+        <textarea name="description"></textarea><br><br>
+
+        <label>Category:</label><br>
+        <select name="category" required>
+            {% for cat in categories %}
+                <option value="{{ cat.id }}">{{ cat.name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label>Image:</label><br>
+        <input type="file" name="image"><br><br>
+
+        <button type="submit">Add Food Item</button>
+    </form>
+
+    <br>
+    <a href="/food_items">Back to Food Items</a>
+
 </body>
 </html>

@@ -48,16 +48,27 @@ def is_logged_in(request):
 def menu(request):
     if not is_logged_in(request):
         return redirect('/login_view')
+    
+    categories = Category.objects.all()
+    food_items = FoodItem.objects.all()
+
     userName = request.session.get('username')
-    return render(request,'menu.html',{'userName':userName})
+    return render(request,'menu.html',{
+        'userName':userName,
+        'categories':categories,
+        'foodItems':food_items
+        })
 
 
-def item_details(request):
+def item_details(request,id):
     if not is_logged_in(request):
         return redirect('/login_view')
     
+    food_item = FoodItem.objects.get(id=id)
 
-    return render(request,'item_details.html')
+    return render(request,'item_details.html',{
+        'foodItem':food_item
+    })
 
 
 def user_order(request):
@@ -134,7 +145,26 @@ def add_food_item(request):
     if request.session.get('role') != 'manager':
         return HttpResponse('Unauthorized')
     
-    return render(request,'add_food_item.html')
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        price = request.POST.get('price')
+        description = request.POST.get('description')
+        category_id = request.POST.get('category')
+        category = Category.objects.get(id=category_id)
+        image = request.FILES.get('image')
+
+        FoodItem.objects.create(
+            name = name,
+            price = price,
+            description = description,
+            category = category,
+            image = image
+        )
+        return redirect('/add_food_item')
+
+    categories = Category.objects.all()
+    return render(request,'add_food_item.html',{'categories':categories})
 
 def edit_item(request,id):
     if not is_logged_in(request):
@@ -154,7 +184,7 @@ def edit_item(request,id):
             item.image = request.FILES.get("image")
         
         item.save()
-        return redirect('edit_item', id=id)
+        return redirect('editItem', id=id)
 
     return render(request,'edit_item.html',{
         'item':item
@@ -168,5 +198,8 @@ def delete_item(request,id):
     if request.session.get('role') != 'manager':
         return HttpResponse('Unauthorized')
     
+    item = FoodItem.objects.get(id=id)
+    item.delete()
+
     # if request.method == 'POST'
     return redirect('/food_items')

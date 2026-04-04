@@ -13,7 +13,7 @@ urlpatterns = [
 
     #customer
     path('menu',views.menu),
-    path('menu/item_details',views.item_details),
+    path('menu/item_details/<int:id>',views.item_details),
     path('user_order',views.user_order),
     path('user_order_history',views.user_order_history),
 
@@ -25,7 +25,7 @@ urlpatterns = [
     path('room_view',views.room_view),
     path('orders_history',views.orders_history),
     path('add_food_item',views.add_food_item),
-    path('edit_item/<int:id>',views.edit_item),
+    path('edit_item/<int:id>',views.edit_item,name="editItem"),
     path('edit_item/edit_item/<int:id>',views.edit_item),
     path('delete_item/<int:id>',views.delete_item)
 ]

@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="{% static 'Myapp/food_items.css' %}">
 </head>
 <body>
-    <button onclick="history.back()">back</button>
+    <form action="/manager"><button type="submit">back</button></form>
+    
     <h1>Food Items List</h1>
     <form action="add_food_item">
         <button type="submit">Add Food Item</button>
