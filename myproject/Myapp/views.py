@@ -43,6 +43,9 @@ def logout_view(request):
 def is_logged_in(request):
     return request.session.get('user_id')
 
+def about(request):
+    return render(request,'about.html')
+
 
 #Customers Views
 def menu(request):

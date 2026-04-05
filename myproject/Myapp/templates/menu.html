@@ -1,40 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+{% extends 'navbar.html' %}
+{% block content %}
     {% load static %}
-    <link rel="stylesheet" href="{% static 'Myapp/menu.css' %}">
-</head>
-<body>
-    <nav class="nav-bar" id="navBar">
-        <form action="/"><button class="home-icon"></button></form>
-        
+    <link rel="stylesheet" href="{% static '/Myapp/menu.css' %}">
 
-        <div class="nav-options">
-            <form action="/">
-                <button type="submit" class="nav-option">Home</button>
-            </form>
-
-            <form action="user_order">
-                <button type="submit" class="nav-option">Orders</button>
-            </form>
-
-            <form action="">
-                <button type="submit" class="nav-option">Cart</button>
-            </form>
-
-            <form action="">
-                <button type="submit" class="nav-option">Favourites</button>
-            </form>
-
-            <div class="user-icon-container">
-                <button class="user-icon"></button>
-            </div>
-        </div>
-    </nav>
-    
     <div class="menu-img">
         <h1 class = "menu-heading">Great Food,<br><span class="delivered-fast">delivered fast.</span></h1>
         <p class="menu-desc">Order from 10,000+ restaurants near you. Track live, earn<br> rewards, get exclusive deals on every bite.</p>
@@ -85,5 +53,4 @@
         {% endfor %}
     </div>
     <script src="{% static 'Myapp/menu.js' %}"></script>
-</body>
-</html>
+{% endblock %}

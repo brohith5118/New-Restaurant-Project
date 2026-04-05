@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'Myapp/navbar.css' %}">
+</head>
+<body>
+     <nav class="nav-bar" id="navBar">
+        <form action="/"><button class="home-icon"></button></form>
+        
+
+        <div class="nav-options">
+            <form action="/menu">
+                <button type="submit" class="nav-option">Menu</button>
+            </form>
+
+            <form action="user_order">
+                <button type="submit" class="nav-option">Orders</button>
+            </form>
+
+            <form action="">
+                <button type="submit" class="nav-option">Cart</button>
+            </form>
+
+            <form action="">
+                <button type="submit" class="nav-option">Favourites</button>
+            </form>
+
+            <div class="user-icon-container">
+                <button class="user-icon"></button>
+            </div>
+        </div>
+    </nav>
+    
+    {% block content %}
+    {% endblock %}
+
+</body>
+</html>

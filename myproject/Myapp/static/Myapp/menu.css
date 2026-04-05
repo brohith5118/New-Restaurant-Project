@@ -9,15 +9,7 @@
 
 /* Nav Bar */
 .nav-bar{
-    background-color: transparent;
-    position: fixed;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
     transition: background-color 0.3s ease, border-bottom 0.2s ease;
-    padding: 10px;
-    height: 60px;
-    z-index: 1000;
 }
 .nav-bar.scrolled{
     background-color: rgb(255, 243, 230,0.9);
@@ -25,42 +17,13 @@
     box-shadow: 0 2px 5px,rgba(0,0,0,0.1);
     backdrop-filter: blur(10px);
 }
-.home-icon{
-    background-image: url("https://foodiehub-8e5p886.public.builtwithrocket.new/_next/image?url=%2Fassets%2Fimages%2Fapp_logo.png&w=64&q=85");
-    background-color: transparent;
-    background-size: cover;
-    height: 40px;
-    width: 40px;
-    border: 0;
-    cursor: pointer;
-}
-.nav-options{
-    color: rgb(255, 255, 255);
-    display: flex;
-    gap: 15px;
-}
 .nav-option{
-    height: 30px;
-    border-radius: 5px;
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    background-color: transparent;
-    border: 0;
     color: white;
 }
-.nav-option:hover{
-    background-color: rgba(224, 224, 224, 0.591);
+.nav-option.scrolled{
+    color: black;
 }
 
-.user-icon{
-    height: 40px;
-    width: 40px;
-    border-radius: 40px;
-    cursor: pointer;
-}
 
 /* Background Section */
 .menu-img {

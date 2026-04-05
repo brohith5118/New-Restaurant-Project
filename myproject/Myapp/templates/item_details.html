@@ -1,14 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="/menu"><button>back</button></form>
-    <img src="{{foodItem.image.url}}" class="item-image">
-    <div></div>
-    <h1>{{foodItem.name}}</h1>
-</body>
-</html>
+{% extends 'navbar.html' %}
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static '/Myapp/item_details.css' %}">
+    <!-- <form action="/menu"><button>back</button></form> -->
+    <div>
+        <img src="{{foodItem.image.url}}" class="item-image">
+        <div >
+            <div>
+                <p>{{foodItem.name}}</p>
+                <p>₹{{foodItem.price}}</p>
+                <p>{{foodItem.description}}</p>
+            </div>
+            <div>
+                <div>
+                    <p>4.5<br>5,673 Reviews</p>
+                </div>
+            </div>
+            <button>Add To Cart</button>
+        </div>
+    </div>
+{% endblock %}
