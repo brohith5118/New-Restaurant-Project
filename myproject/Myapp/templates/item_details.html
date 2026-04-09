@@ -3,20 +3,29 @@
     {% load static %}
     <link rel="stylesheet" href="{% static '/Myapp/item_details.css' %}">
     <!-- <form action="/menu"><button>back</button></form> -->
-    <div>
-        <img src="{{foodItem.image.url}}" class="item-image">
-        <div >
-            <div>
-                <p>{{foodItem.name}}</p>
-                <p>₹{{foodItem.price}}</p>
-                <p>{{foodItem.description}}</p>
-            </div>
-            <div>
-                <div>
-                    <p>4.5<br>5,673 Reviews</p>
+     <div class="page-divider">
+        <div class="item">
+            <div class="item-container">
+                <img src="{{foodItem.image.url}}" class="item-image">
+                <div class="item-details-container">
+                    <div>
+                        <p class="item-name">{{foodItem.name}}</p>
+                        <p class="item-price">₹{{foodItem.price}}</p>
+                        <p class="item-description">{{foodItem.description}}</p>
+                    </div>
+                    <div>
+                        <div class="item-rating">
+                            <p class="item-rating-number">☆4.5<br><span class="item-number-rating">5,673 Reviews</span></p>
+                        </div>
+                        <button class="add-button">Add To Cart</button>
+                    </div>
                 </div>
             </div>
-            <button>Add To Cart</button>
         </div>
-    </div>
+        <div class="cart">
+            <div class="cart-container">
+               <p>Your Cart Details Come Here</p>
+            </div>
+        </div>
+     </div>
 {% endblock %}
