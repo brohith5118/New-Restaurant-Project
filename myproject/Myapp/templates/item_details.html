@@ -1,31 +1,72 @@
 {% extends 'navbar.html' %}
 {% block content %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static '/Myapp/item_details.css' %}">
-    <!-- <form action="/menu"><button>back</button></form> -->
-     <div class="page-divider">
-        <div class="item">
-            <div class="item-container">
-                <img src="{{foodItem.image.url}}" class="item-image">
-                <div class="item-details-container">
-                    <div>
-                        <p class="item-name">{{foodItem.name}}</p>
-                        <p class="item-price">₹{{foodItem.price}}</p>
-                        <p class="item-description">{{foodItem.description}}</p>
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'Myapp/item_details.css' %}">
+
+<div class="page-divider">
+
+    <!-- ITEM SECTION -->
+    <div class="item">
+        <div class="item-container">
+
+            <img src="{{foodItem.image.url}}" class="item-image">
+
+            <div class="item-details-container">
+                
+                <div class="item-info">
+                    <p class="item-name">{{foodItem.name}}</p>
+                    <p class="item-price">₹{{foodItem.price}}</p>
+                    <p class="item-description">{{foodItem.description}}</p>
+                </div>
+
+                <div class="item-actions">
+                    <div class="item-rating">
+                        <p class="item-rating-number">
+                            ☆4.5 <br>
+                            <span class="item-number-rating">5,673 Reviews</span>
+                        </p>
                     </div>
-                    <div>
-                        <div class="item-rating">
-                            <p class="item-rating-number">☆4.5<br><span class="item-number-rating">5,673 Reviews</span></p>
-                        </div>
-                        <button class="add-button">Add To Cart</button>
-                    </div>
+                    <button class="add-button">Add To Cart</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- CART SECTION -->
+    <div class="cart">
+        <div class="cart-container">
+            <h3>Your Cart</h3>
+            <p>Your Cart Details Come Here</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- REVIEWS SECTION -->
+<div class="reviews-section">
+    <h1>Ratings & Reviews</h1>
+
+    <div class="review-container">
+
+        <div class="overall-rating">
+            <h1>☆4.5</h1>
+        </div>
+
+        <div class="review-form">
+            <p class="review-title">Write a Review</p>
+            <textarea placeholder="Share your experience..."></textarea>
+
+            <div class="review-footer">
+                <p>0/500 characters</p>
+                <div class="cart-controls" data-id="{{ foodItem.id }}">
+                    <button class="add-button">Add To Cart</button>
                 </div>
             </div>
         </div>
-        <div class="cart">
-            <div class="cart-container">
-               <p>Your Cart Details Come Here</p>
-            </div>
-        </div>
-     </div>
-{% endblock %}
+
+    </div>
+</div>
+<script src="{% static 'Myapp/item_details.js' %}"></script>
+{% endblock %}  
