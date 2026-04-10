@@ -27,7 +27,9 @@
                             <span class="item-number-rating">5,673 Reviews</span>
                         </p>
                     </div>
-                    <button class="add-button">Add To Cart</button>
+                    <div class="cart-controls" data-id="{{ foodItem.id }}">
+                        <button class="add-button">Add To Cart</button>
+                    </div>
                 </div>
 
             </div>
@@ -37,8 +39,13 @@
     <!-- CART SECTION -->
     <div class="cart">
         <div class="cart-container">
-            <h3>Your Cart</h3>
-            <p>Your Cart Details Come Here</p>
+            <div>
+                <h3>Your Cart</h3>
+            </div>
+            <div id="cartHolder" class="cart-holder">
+                🛒
+                Your Cart is Currently Empty
+            </div>
         </div>
     </div>
 
@@ -60,9 +67,7 @@
 
             <div class="review-footer">
                 <p>0/500 characters</p>
-                <div class="cart-controls" data-id="{{ foodItem.id }}">
-                    <button class="add-button">Add To Cart</button>
-                </div>
+                <button class="add-button">Add Review</button>
             </div>
         </div>
 

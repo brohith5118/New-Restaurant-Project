@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from .models import User,Category,Order,OrderItem,FoodItem
+from django.http import JsonResponse
+from .models import User,Category,Order,OrderItem,FoodItem,Cart, CartItem
+
 
 # Create your views here.
 #login Page
@@ -88,6 +90,73 @@ def user_order_history(request):
     
 
     return render(request,'user_order_history.html')
+
+def add_to_cart(request):
+    if request.method == "POST":
+        user = request.user
+        item_id = request.POST.get("item_id")
+
+        food_item = FoodItem.objects.get(id=item_id)
+
+        cart, created = Cart.objects.get_or_create(user=user)
+
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=cart,
+            food_item=food_item
+        )
+
+        if not created:
+            cart_item.quantity += 1
+
+        cart_item.save()
+
+        return JsonResponse({
+            "status": "success",
+            "quantity": cart_item.quantity
+        })
+
+
+def update_cart(request):
+    if request.method == "POST":
+        item_id = request.POST.get("item_id")
+        action = request.POST.get("action")
+
+        cart = Cart.objects.get(user=request.user)
+        cart_item = CartItem.objects.get(cart=cart, food_item_id=item_id)
+
+        if action == "increase":
+            cart_item.quantity += 1
+
+        elif action == "decrease":
+            cart_item.quantity -= 1
+
+            if cart_item.quantity <= 0:
+                cart_item.delete()
+                return JsonResponse({"status": "removed"})
+
+        cart_item.save()
+
+        return JsonResponse({
+            "status": "success",
+            "quantity": cart_item.quantity
+        })
+    
+
+def get_cart(request):
+    cart = Cart.objects.get(user=request.user)
+    items = CartItem.objects.filter(cart=cart)
+
+    data = []
+
+    for item in items:
+        data.append({
+            "id": item.food_item.id,
+            "name": item.food_item.name,
+            "quantity": item.quantity,
+            "price": item.food_item.price
+        })
+
+    return JsonResponse({"items": data})
 
 
 #Managers Views

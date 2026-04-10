@@ -28,7 +28,6 @@ body {
 /* ITEM SECTION */
 .item {
     flex: 2;
-    overflow-y: auto;
 }
 
 .item-container {
@@ -42,6 +41,8 @@ body {
 .item-image {
     width: 100%;
     height: 300px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     object-fit: cover; /* IMPORTANT FIX */
 }
 
@@ -225,20 +226,30 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    background-color: #ff5722;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    padding: 5px 5px;
 }
 
 .qty-btn {
-    width: 30px;
+    width: 20px;
     height: 30px;
     border: none;
-    background: #ff5722;
     color: white;
     font-size: 18px;
     border-radius: 6px;
+    background-color: #ff5722;
     cursor: pointer;
 }
 
 .qty-count {
     font-size: 18px;
+    color: white    ;
     font-weight: bold;
+    border-left: solid 1px white;
+    border-right: solid 1px white;
+    width: 30px;
+    text-align: center;
 }

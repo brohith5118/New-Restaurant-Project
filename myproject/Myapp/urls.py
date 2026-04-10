@@ -16,6 +16,9 @@ urlpatterns = [
     path('menu/item_details/<int:id>',views.item_details),
     path('user_order',views.user_order),
     path('user_order_history',views.user_order_history),
+    path('add-to-cart/', views.add_to_cart, name='add_to_cart'),
+    path('update-cart/', views.update_cart, name='update_cart'),
+    path('get-cart/', views.get_cart, name='get_cart'),
 
     #manager
     path('manager',views.manager),
