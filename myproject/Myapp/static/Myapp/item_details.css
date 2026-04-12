@@ -125,10 +125,78 @@ body {
     position: sticky;
     top: 100px;
     background: white;
-    padding: 20px;
     border-radius: 12px;
     height: fit-content;
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.cart-holder{
+    display: flex;
+    flex-direction: column;
+    gap: 10px; 
+    overflow-y: scroll;
+    border-top: #555 solid 1px;
+    border-bottom: #555 solid 1px;
+    padding:15px;
+}
+
+.cart-item{
+    display: flex;
+    padding: 15px;
+    justify-content: space-between;
+}
+
+.cartItemName{
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.cartItemPrice{
+    font-size: 12px;
+    color: #595959;
+    margin-top: 5px;
+}
+
+.cart-qty-controller {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: #ff5722;
+    border-radius: 8px;
+    margin-top: 15px;
+
+}
+
+.cart-qty-btn {
+    border: none;
+    color: white;
+    font-size: 12px;
+    border-radius: 6px;
+    background-color: #ff5722;
+    cursor: pointer;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.cart-qty-count {
+    font-size: 12px;
+    color: white    ;
+    font-weight: bold;
+    border-left: solid 1px white;
+    border-right: solid 1px white;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+    align-content: center;
+    background-color: orangered;
+}
+
+.total-cost{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    font-weight:450;
+    font-size: 18px;
 }
 
 /* REVIEWS */
@@ -224,18 +292,17 @@ body {
 
 .qty-controller {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 10px;
     background-color: #ff5722;
     border-radius: 8px;
     cursor: pointer;
     margin-top: 15px;
-    padding: 5px 5px;
 }
 
 .qty-btn {
-    width: 20px;
-    height: 30px;
+    width: 35px;
+    height: 40px;
     border: none;
     color: white;
     font-size: 18px;
@@ -251,5 +318,12 @@ body {
     border-left: solid 1px white;
     border-right: solid 1px white;
     width: 30px;
+    height: 40px;
     text-align: center;
+    align-content: center;
+    background-color: orangered;
+}
+
+.hidden {
+    display: none;
 }

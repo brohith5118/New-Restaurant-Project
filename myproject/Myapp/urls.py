@@ -13,12 +13,14 @@ urlpatterns = [
 
     #customer
     path('menu',views.menu),
-    path('menu/item_details/<int:id>',views.item_details),
+    path('menu/item_details/<int:id>',views.item_details,name="item_details"),
     path('user_order',views.user_order),
     path('user_order_history',views.user_order_history),
-    path('add-to-cart/', views.add_to_cart, name='add_to_cart'),
-    path('update-cart/', views.update_cart, name='update_cart'),
-    path('get-cart/', views.get_cart, name='get_cart'),
+    path('add_cart_item/<int:id>/',views.add_cart_item),
+    path('reduce_cart_item/<int:id>/',views.reduce_cart_item),
+    path('fetch_add_cart_item/<int:id>/',views.fetch_add_cart_item),
+    path('fetch_reduce_cart_item/<int:id>/',views.fetch_reduce_cart_item),
+    path('cart_view',views.cart_view,name='cart_view'),
 
     #manager
     path('manager',views.manager),

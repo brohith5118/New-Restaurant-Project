@@ -1,0 +1,41 @@
+{% extends 'navbar.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'Myapp/cart_view.css' %}">
+
+<h1>Your Shopping Cart</h1>
+<p id = "countItems">({{ cart_items|length }} items)</p>
+
+<div>
+    {% for item in cart_items %}
+    <div id="cartItem{{item.food_item.id}}" class="cart-item">
+        <img src="{{ item.food_item.image.url }}" class="cart-item-image">
+
+        <div class="cart-item-details">
+
+            <div>
+                <p class="cart-item-name">{{ item.food_item.name }}</p>
+                <p class="cart-item-price">₹{{ item.food_item.price }}</p>
+            </div>
+
+            <div id="cart-item-quantity{{ item.food_item.id }}" class="cart-item-quantity">
+                <button data-id="{{ item.food_item.id }}" data-price="{{ item.food_item.price }}" class="minusBtn qty-btn">-</button>
+                <span id="count{{item.food_item.id}}" class="qty-count" data-price="{{ item.food_item.price }}">{{ item.quantity }}</span>
+                <button data-id="{{ item.food_item.id }}" data-price="{{ item.food_item.price }}" class="plusBtn qty-btn">+</button>
+            </div>
+            
+        </div>
+    </div>
+    {% endfor %}
+    <h3>Total: ₹<span id="totalPrice">0</span></h3>
+
+</div>
+
+
+
+<form style="display:none;">
+    {% csrf_token %}
+</form>
+
+<script src="{% static 'Myapp/cart_view.js' %}"></script>
+{% endblock %}

@@ -1,21 +1,24 @@
-window.onload = function () {
+document.addEventListener("DOMContentLoaded", () => {
+    setupButtons();
     loadCart();
-};
-document.querySelectorAll('.cart-controls').forEach(control => {
-
-    let addBtn = control.querySelector('.add-button');
-
-    if (addBtn) {
-        addBtn.addEventListener('click', () => {
-            let itemId = control.dataset.id;
-            addToCart(itemId, control);
-        });
-    }
-
 });
 
 function getCSRFToken() {
     return document.querySelector('[name=csrfmiddlewaretoken]').value;
+}
+
+/* SETUP BUTTON */
+function setupButtons() {
+    document.querySelectorAll('.cart-controls').forEach(control => {
+
+        control.onclick = (e) => {
+            if (e.target.classList.contains('add-button')) {
+                let itemId = control.dataset.id;
+                addToCart(itemId, control);
+            }
+        };
+
+    });
 }
 
 /* ADD ITEM */
@@ -32,17 +35,17 @@ function addToCart(itemId, control) {
     .then(res => res.json())
     .then(data => {
         renderQty(control, itemId, data.quantity);
-        loadCart(); // refresh cart UI
+        loadCart();
     });
 }
 
-/* RENDER +/- UI */
-function renderQty(control, itemId, quantity) {
+/* RENDER UI */
+function renderQty(control, itemId, qty) {
     control.innerHTML = `
         <div class="qty-controller">
-            <button class="qty-btn minus">-</button>
-            <span class="qty-count">${quantity}</span>
-            <button class="qty-btn plus">+</button>
+            <button class="minus">-</button>
+            <span>${qty}</span>
+            <button class="plus">+</button>
         </div>
     `;
 
@@ -50,7 +53,7 @@ function renderQty(control, itemId, quantity) {
     control.querySelector('.minus').onclick = () => updateCart(itemId, "decrease", control);
 }
 
-/* UPDATE CART */
+/* UPDATE */
 function updateCart(itemId, action, control) {
 
     fetch('/update-cart/', {
@@ -66,46 +69,43 @@ function updateCart(itemId, action, control) {
 
         if (data.status === "removed") {
             control.innerHTML = `<button class="add-button">Add To Cart</button>`;
-            attachAddEvent(control);
         } else {
-            control.querySelector('.qty-count').textContent = data.quantity;
+            control.querySelector('span').textContent = data.quantity;
         }
 
-        loadCart(); // refresh cart UI
+        loadCart();
     });
 }
 
+/* LOAD CART */
 function loadCart() {
+
     fetch('/get-cart/')
     .then(res => res.json())
     .then(data => {
 
-        let cartContainer = document.getElementById("cartHolder");
-        cartContainer.innerHTML = "";
+        let cartBox = document.getElementById("cartHolder");
+        cartBox.innerHTML = "";
 
         let total = 0;
 
         if (data.items.length === 0) {
-            cartContainer.innerHTML = "<p>🛒 Your Cart is Currently Empty</p>";
+            cartBox.innerHTML = "🛒 Empty Cart";
             return;
         }
 
         data.items.forEach(item => {
             total += item.price * item.quantity;
 
-            cartContainer.innerHTML += `
-                <p>${item.name} × ${item.quantity} - ₹${item.price * item.quantity}</p>
+            cartBox.innerHTML += `
+                <p>${item.name} × ${item.quantity}</p>
             `;
+
+            // 🔥 sync button
+            let control = document.querySelector(`.cart-controls[data-id="${item.id}"]`);
+            if (control) renderQty(control, item.id, item.quantity);
         });
 
-        cartContainer.innerHTML += `<hr><h4>Total: ₹${total}</h4>`;
+        cartBox.innerHTML += `<hr>Total: ₹${total}`;
     });
-}
-
-/* REATTACH ADD BUTTON */
-function attachAddEvent(control) {
-    control.querySelector('.add-button').onclick = () => {
-        let itemId = control.dataset.id;
-        addToCart(itemId, control);
-    };
 }

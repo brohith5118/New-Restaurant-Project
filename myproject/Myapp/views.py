@@ -70,10 +70,107 @@ def item_details(request,id):
         return redirect('/login_view')
     
     food_item = FoodItem.objects.get(id=id)
+    itemcart = CartItem.objects.filter(cart__user_id=request.session.get('user_id'), food_item_id=id).first()
+    cart = CartItem.objects.filter(cart__user_id=request.session.get('user_id'))
 
     return render(request,'item_details.html',{
-        'foodItem':food_item
+        'foodItem':food_item,
+        'cart': cart,
+        'itemcart': itemcart,
     })
+
+
+def cart_view(request):
+    if not is_logged_in(request):
+        return redirect('/login_view')
+    
+    cart_items = CartItem.objects.filter(cart__user_id=request.session.get('user_id')).select_related('food_item')
+
+    return render(request,'cart_view.html',{
+        'cart_items':cart_items
+    })
+
+
+def add_cart_item(request, id):
+    if not is_logged_in(request):
+        return redirect('/login_view')
+    
+    user_id = request.session.get('user_id')
+    cart, created = Cart.objects.get_or_create(user_id=user_id)
+
+    food_item = FoodItem.objects.get(id=id)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, food_item=food_item)
+
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return redirect('item_details', id=id)
+
+def reduce_cart_item(request, id):
+    if not is_logged_in(request):
+        return redirect('/login_view')
+    
+    user_id = request.session.get('user_id')
+    cart = Cart.objects.filter(user_id=user_id).first()
+
+    if not cart:
+        return redirect('item_details', id=id)
+
+    food_item = FoodItem.objects.get(id=id)
+    cart_item = CartItem.objects.filter(cart=cart, food_item=food_item).first()
+
+    if cart_item:
+        if cart_item.quantity > 1:
+            cart_item.quantity -= 1
+            cart_item.save()
+        else:
+            cart_item.delete()
+
+    return redirect('item_details', id=id)
+
+
+def fetch_add_cart_item(request, id):
+    if not is_logged_in(request):
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+    
+    user_id = request.session.get('user_id')
+    cart, created = Cart.objects.get_or_create(user_id=user_id)
+
+    food_item = FoodItem.objects.get(id=id)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, food_item=food_item)
+
+    if not created:
+        cart_item.quantity += 1
+        cart_item.save()
+
+    return JsonResponse({'quantity': cart_item.quantity})
+
+
+def fetch_reduce_cart_item(request, id):
+    if not is_logged_in(request):
+        return JsonResponse({'error': 'Unauthorized'}, status=401)
+    
+    user_id = request.session.get('user_id')
+    cart = Cart.objects.filter(user_id=user_id).first()
+
+    if not cart:
+        return JsonResponse({'error': 'Cart not found'}, status=404)
+
+    food_item = FoodItem.objects.get(id=id)
+    cart_item = CartItem.objects.filter(cart=cart, food_item=food_item).first()
+
+    if cart_item:
+        if cart_item.quantity > 1:
+            cart_item.quantity -= 1
+            cart_item.save()
+            return JsonResponse({'quantity': cart_item.quantity})
+        else:
+            cart_item.delete()
+            return JsonResponse({'quantity': 0})
+
+    return JsonResponse({'error': 'Cart item not found'}, status=404)
+
 
 
 def user_order(request):
@@ -90,73 +187,6 @@ def user_order_history(request):
     
 
     return render(request,'user_order_history.html')
-
-def add_to_cart(request):
-    if request.method == "POST":
-        user = request.user
-        item_id = request.POST.get("item_id")
-
-        food_item = FoodItem.objects.get(id=item_id)
-
-        cart, created = Cart.objects.get_or_create(user=user)
-
-        cart_item, created = CartItem.objects.get_or_create(
-            cart=cart,
-            food_item=food_item
-        )
-
-        if not created:
-            cart_item.quantity += 1
-
-        cart_item.save()
-
-        return JsonResponse({
-            "status": "success",
-            "quantity": cart_item.quantity
-        })
-
-
-def update_cart(request):
-    if request.method == "POST":
-        item_id = request.POST.get("item_id")
-        action = request.POST.get("action")
-
-        cart = Cart.objects.get(user=request.user)
-        cart_item = CartItem.objects.get(cart=cart, food_item_id=item_id)
-
-        if action == "increase":
-            cart_item.quantity += 1
-
-        elif action == "decrease":
-            cart_item.quantity -= 1
-
-            if cart_item.quantity <= 0:
-                cart_item.delete()
-                return JsonResponse({"status": "removed"})
-
-        cart_item.save()
-
-        return JsonResponse({
-            "status": "success",
-            "quantity": cart_item.quantity
-        })
-    
-
-def get_cart(request):
-    cart = Cart.objects.get(user=request.user)
-    items = CartItem.objects.filter(cart=cart)
-
-    data = []
-
-    for item in items:
-        data.append({
-            "id": item.food_item.id,
-            "name": item.food_item.name,
-            "quantity": item.quantity,
-            "price": item.food_item.price
-        })
-
-    return JsonResponse({"items": data})
 
 
 #Managers Views

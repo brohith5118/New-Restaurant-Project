@@ -3,6 +3,12 @@
 {% load static %}
 
 <link rel="stylesheet" href="{% static 'Myapp/item_details.css' %}">
+<input type="hidden" id="currentItemId" value="{{ foodItem.id }}">
+<!-- CSRF TOKEN (IMPORTANT) --> 
+ <form style="display:none;">
+    {% csrf_token %}
+
+</form>
 
 <div class="page-divider">
 
@@ -27,9 +33,31 @@
                             <span class="item-number-rating">5,673 Reviews</span>
                         </p>
                     </div>
-                    <div class="cart-controls" data-id="{{ foodItem.id }}">
-                        <button class="add-button">Add To Cart</button>
+
+                    <!-- CART BUTTON -->
+                    <div id="cartController" class="cart-controls" data-id="{{ foodItem.id }}">
+                        {% if not itemcart.quantity %}
+                        <form action="/add_cart_item/{{ foodItem.id }}/" method="post">
+                            {% csrf_token %}
+                            <button id="addButton" class="add-button">Add To Cart</button>
+                        </form>
+                        {% else %}
+                        <form action="/add_cart_item/{{ foodItem.id }}/" method="post">
+                            {% csrf_token %}
+                            <button id="addButton" class="add-button hidden">Add To Cart</button>
+                        </form>
+
+                        <div id="qtyController" class="qty-controller">
+                            <button id="reduceButton" class="qty-btn" data-id="{{ foodItem.id }}">-</button>
+
+                            <span id="itemCount" class="qty-count">{{ itemcart.quantity }}</span>
+
+                            <button id="increaseButton" data-id="{{ foodItem.id }}" class="qty-btn">+</button>
+
+                        </div>
+                        {% endif %}
                     </div>
+
                 </div>
 
             </div>
@@ -39,13 +67,29 @@
     <!-- CART SECTION -->
     <div class="cart">
         <div class="cart-container">
-            <div>
-                <h3>Your Cart</h3>
-            </div>
+            <h3>🛒Your Cart</h3>
             <div id="cartHolder" class="cart-holder">
-                🛒
-                Your Cart is Currently Empty
+                {% for cartItem in cart %}
+                    <div class="cart-item">
+                        <div>
+                            <p class="cartItemName">{{cartItem.food_item.name}}</p>
+                            <p class="cartItemPrice">₹{{cartItem.food_item.price}}</p>
+                        </div>
+                        <div class="cart-qty-controller">
+                            <button class="cartReduceButton cart-qty-btn" data-id="{{ cartItem.id }}">-</button>
+                            <p data-price="{{ cartItem.food_item.price }}" id="cartItemQuantity{{ cartItem.id }}" class="cartItemQuantity cart-qty-count">{{cartItem.quantity}}</p>
+                            <button class="cartIncreaseButton cart-qty-btn" data-id="{{ cartItem.id }}">+</button>
+                        </div>
+                    </div>
+                {% endfor%}
             </div>
+            <div class="total-cost">
+                <p>Total</p>
+                <p>₹<span id="totalPrice">0</span></p>
+            </div>
+            <form action="/cart_view">
+                <button class="checkout-button">Proceed to Checkout</button>
+            </form>
         </div>
     </div>
 
@@ -73,5 +117,11 @@
 
     </div>
 </div>
-<script src="{% static 'Myapp/item_details.js' %}"></script>
-{% endblock %}  
+
+<!-- CSRF token (keep this somewhere on page) -->
+<form style="display:none;">
+    {% csrf_token %}
+</form>
+
+<script src="{% static 'Myapp/item_details2.js' %}"></script>
+{% endblock %}

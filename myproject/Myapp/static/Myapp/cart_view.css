@@ -1,0 +1,37 @@
+.cart-item{
+    display: flex;
+    padding: 15px;
+    border: 1px solid #000;
+    border-radius:10px;
+
+}
+
+.cart-item-image{
+    width: 200px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.cart-item-details{
+    margin-left: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.qty-btn {
+    margin-top: 15px;
+    border: 2px solid #ff5722;
+    background: transparent;
+    color: #ff5722;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.qty-btn:hover {
+    background: #ff5722;
+    color: white;
+}
