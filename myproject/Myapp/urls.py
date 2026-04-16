@@ -21,6 +21,8 @@ urlpatterns = [
     path('fetch_add_cart_item/<int:id>/',views.fetch_add_cart_item),
     path('fetch_reduce_cart_item/<int:id>/',views.fetch_reduce_cart_item),
     path('cart_view',views.cart_view,name='cart_view'),
+    path('place_order',views.place_order,name='place_order'),
+    path('order_summary/<int:order_id>/',views.order_summary,name='order_summary'),
 
     #manager
     path('manager',views.manager),

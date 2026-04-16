@@ -133,6 +133,7 @@ body {
 .cart-holder{
     display: flex;
     flex-direction: column;
+    max-height: 350px;
     gap: 10px; 
     overflow-y: scroll;
     border-top: #555 solid 1px;
@@ -197,6 +198,40 @@ body {
     padding: 15px;
     font-weight:450;
     font-size: 18px;
+}
+
+.cart-container {
+    padding: 15px;
+}
+
+.cart h3 {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-item {
+    border-bottom: 1px solid #eee;
+    transition: 0.2s;
+}
+
+.cart-item:hover {
+    background-color: #f9f9f9;
+}
+
+.checkout-button {
+    width: 90%;
+    margin: 10px auto 15px;
+    display: block;
+    padding: 12px;
+    background: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.checkout-button:hover {
+    background: #e64a19;
 }
 
 /* REVIEWS */

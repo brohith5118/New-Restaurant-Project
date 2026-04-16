@@ -1,8 +1,8 @@
 {% extends 'navbar.html' %}
 {% block content %}
 {% load static %}
-
 <link rel="stylesheet" href="{% static 'Myapp/item_details.css' %}">
+
 <input type="hidden" id="currentItemId" value="{{ foodItem.id }}">
 <!-- CSRF TOKEN (IMPORTANT) --> 
  <form style="display:none;">
@@ -35,27 +35,23 @@
                     </div>
 
                     <!-- CART BUTTON -->
-                    <div id="cartController" class="cart-controls" data-id="{{ foodItem.id }}">
-                        {% if not itemcart.quantity %}
-                        <form action="/add_cart_item/{{ foodItem.id }}/" method="post">
-                            {% csrf_token %}
-                            <button id="addButton" class="add-button">Add To Cart</button>
-                        </form>
-                        {% else %}
-                        <form action="/add_cart_item/{{ foodItem.id }}/" method="post">
-                            {% csrf_token %}
-                            <button id="addButton" class="add-button hidden">Add To Cart</button>
-                        </form>
+                    <div class="cart-controls" data-id="{{ foodItem.id }}">
+    
+                        <button class="addButton add-button {% if itemcart.quantity %}hidden{% endif %}" 
+                                data-id="{{ foodItem.id }}">
+                            Add To Cart
+                        </button>
 
-                        <div id="qtyController" class="qty-controller">
-                            <button id="reduceButton" class="qty-btn" data-id="{{ foodItem.id }}">-</button>
+                        <div class="qty-controller {% if not itemcart.quantity %}hidden{% endif %}">
+                            <button class="reduceButton qty-btn" data-id="{{ foodItem.id }}">-</button>
 
-                            <span id="itemCount" class="qty-count">{{ itemcart.quantity }}</span>
+                            <span class="itemCount qty-count" data-id="{{ foodItem.id }}">
+                                {{ itemcart.quantity|default:0 }}
+                            </span>
 
-                            <button id="increaseButton" data-id="{{ foodItem.id }}" class="qty-btn">+</button>
-
+                            <button class="increaseButton qty-btn" data-id="{{ foodItem.id }}">+</button>
                         </div>
-                        {% endif %}
+
                     </div>
 
                 </div>
@@ -70,19 +66,20 @@
             <h3>🛒Your Cart</h3>
             <div id="cartHolder" class="cart-holder">
                 {% for cartItem in cart %}
-                    <div class="cart-item">
+                    <div id="cartItem{{ cartItem.food_item.id }}" class="cart-item">
                         <div>
                             <p class="cartItemName">{{cartItem.food_item.name}}</p>
                             <p class="cartItemPrice">₹{{cartItem.food_item.price}}</p>
                         </div>
                         <div class="cart-qty-controller">
-                            <button class="cartReduceButton cart-qty-btn" data-id="{{ cartItem.id }}">-</button>
-                            <p data-price="{{ cartItem.food_item.price }}" id="cartItemQuantity{{ cartItem.id }}" class="cartItemQuantity cart-qty-count">{{cartItem.quantity}}</p>
-                            <button class="cartIncreaseButton cart-qty-btn" data-id="{{ cartItem.id }}">+</button>
+                            <button class="cartReduceButton cart-qty-btn" data-id="{{ cartItem.food_item.id }}">-</button>
+                            <p data-price="{{ cartItem.food_item.price }}" id="cartItemQuantity{{ cartItem.food_item.id }}" class="cartItemQuantity cart-qty-count">{{cartItem.quantity}}</p>
+                            <button class="cartIncreaseButton cart-qty-btn" data-id="{{ cartItem.food_item.id }}">+</button>
                         </div>
                     </div>
                 {% endfor%}
             </div>
+            <p id="countItems"></p>
             <div class="total-cost">
                 <p>Total</p>
                 <p>₹<span id="totalPrice">0</span></p>

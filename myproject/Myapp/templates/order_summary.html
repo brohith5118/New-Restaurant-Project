@@ -1,0 +1,19 @@
+{% extends 'navbar.html' %}
+{% block content %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'Myapp/order_summary.css' %}">
+    
+    <div class="order-summary-container">
+        <h1>Order Summary</h1>
+        <p>Order ID: {{ order.id }}</p>
+        <p>Status: {{ order.status }}</p>
+        <p>Total Price: {{ order.total_price }}</p>
+
+        <h2>Order Items:</h2>
+        <ul>
+            {% for item in order_items %}
+                <li>{{ item.food_item.name }} - Quantity: {{ item.quantity }} - Price: {{ item.food_item.price }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

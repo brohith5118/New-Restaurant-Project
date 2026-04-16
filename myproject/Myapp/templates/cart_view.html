@@ -4,34 +4,64 @@
 <link rel="stylesheet" href="{% static 'Myapp/cart_view.css' %}">
 
 <h1>Your Shopping Cart</h1>
-<p id = "countItems">({{ cart_items|length }} items)</p>
+<p id="countItems">({{ cart_items|length }} items)</p>
+<div class="cart-container">
 
-<div>
-    {% for item in cart_items %}
-    <div id="cartItem{{item.food_item.id}}" class="cart-item">
-        <img src="{{ item.food_item.image.url }}" class="cart-item-image">
+    <!-- LEFT SIDE → CART ITEMS -->
+    <div class="cart-left">
 
-        <div class="cart-item-details">
+        {% for item in cart_items %}
+        <div id="cartItem{{item.food_item.id}}" class="cart-item">
 
-            <div>
-                <p class="cart-item-name">{{ item.food_item.name }}</p>
-                <p class="cart-item-price">₹{{ item.food_item.price }}</p>
+            <img src="{{ item.food_item.image.url }}" class="cart-item-image">
+
+            <div class="cart-item-details">
+
+                <div>
+                    <p class="cart-item-name">{{ item.food_item.name }}</p>
+                    <p class="cart-item-price">₹{{ item.food_item.price }}</p>
+                </div>
+
+                <div class="cart-item-actions">
+                    <div class="cart-item-quantity">
+                        <button data-id="{{ item.food_item.id }}" class="minusBtn qty-btn">-</button>
+
+                        <span id="count{{item.food_item.id}}" 
+                            class="qty-count" 
+                            data-id="{{ item.food_item.id }}"
+                            data-price="{{ item.food_item.price }}">
+                            {{ item.quantity }}
+                        </span>
+
+                        <button data-id="{{ item.food_item.id }}" class="plusBtn qty-btn">+</button>
+                    </div>
+                    <div id = "itemTotal{{item.food_item.id}}" class="item-total">₹{{ item.total_price }}</div>
+                </div>
+
             </div>
-
-            <div id="cart-item-quantity{{ item.food_item.id }}" class="cart-item-quantity">
-                <button data-id="{{ item.food_item.id }}" data-price="{{ item.food_item.price }}" class="minusBtn qty-btn">-</button>
-                <span id="count{{item.food_item.id}}" class="qty-count" data-price="{{ item.food_item.price }}">{{ item.quantity }}</span>
-                <button data-id="{{ item.food_item.id }}" data-price="{{ item.food_item.price }}" class="plusBtn qty-btn">+</button>
-            </div>
-            
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-    <h3>Total: ₹<span id="totalPrice">0</span></h3>
+
+    <!-- RIGHT SIDE → ORDER SUMMARY -->
+    <div class="cart-right">
+
+        <h2>Order Summary</h2>
+
+        <div class="summary-box">
+            <div class="d-flex flex-row justify-content-between">
+                <p class="total-items">Total Items ( <span id="summaryItems">0</span>items ) </p>
+                <p>₹<span id="totalPrice">0</span></p>
+            </div>
+        </div>
+        <form action="/place_order" method="post">
+            {% csrf_token %}
+            <button class="checkout-btn">Place Order</button>
+        </form>
+
+    </div>
 
 </div>
-
-
 
 <form style="display:none;">
     {% csrf_token %}

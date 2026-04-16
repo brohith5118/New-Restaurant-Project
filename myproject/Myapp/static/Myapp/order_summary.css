@@ -1,0 +1,22 @@
+body{
+    background-color: rgb(252, 255, 225);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.nav-bar{
+    background-color: rgb(255, 255, 255);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-summary-container{
+    background-color: white;
+    padding: 20px;
+    margin-top: 80px;
+    margin: 20px auto;
+    width: 80%;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

@@ -8,6 +8,13 @@
 <body>
     <button onclick="history.back()">back</button>
     <h1>Your Current Orders Will Be Visible Here</h1>
+
+    {% for order in orders %}
+        <p>Order ID: {{ order.id }}</p>
+        <p>Status: {{ order.status }}</p>
+        <p>Total Price: {{ order.total_price }}</p>
+    {% endfor %}
+
     <form action="user_order_history">
         <button type="submit">Orders History</button>
     </form>

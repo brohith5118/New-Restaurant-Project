@@ -15,6 +15,7 @@ plusBtn.forEach(btn=>{
         .then(data => {
             document.getElementById(`count${itemId}`).textContent = data.quantity;
             updateTotal();
+            updateItemTotal();
         })
     })
 })
@@ -39,24 +40,37 @@ minusBtn.forEach(btn=>{
                 document.getElementById(`cartItem${itemId}`).remove();
             }
             updateTotal();
+            updateItemTotal();
         });
     })
 });
 
+function updateItemTotal() {
+    document.querySelectorAll(".qty-count").forEach(span => {
+        let quantity = parseInt(span.textContent);
+        let price = parseFloat(span.getAttribute("data-price"));
+        let itemId = span.getAttribute("data-id");
+        let itemTotal = quantity * price;
+        document.getElementById(`itemTotal${itemId}`).textContent = `₹${itemTotal}`;
+    });
+}
 
 function updateTotal() {
     let total = 0;
-    let countItems = 0;
+    let totalItems = 0;
+
     document.querySelectorAll(".qty-count").forEach(span => {
         let quantity = parseInt(span.textContent);
-
         let price = parseFloat(span.getAttribute("data-price"));
 
         total += quantity * price;
-        countItems += 1;
+        totalItems += quantity; // ✅ FIXED
     });
-    document.getElementById("countItems").textContent = `(${countItems} items)`;
+
+    document.getElementById("countItems").textContent = `(${totalItems} items)`;
+    document.getElementById("summaryItems").textContent = totalItems;
     document.getElementById("totalPrice").textContent = total;
 }
 
 updateTotal();
+updateItemTotal();

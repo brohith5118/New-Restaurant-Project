@@ -85,7 +85,9 @@ def cart_view(request):
         return redirect('/login_view')
     
     cart_items = CartItem.objects.filter(cart__user_id=request.session.get('user_id')).select_related('food_item')
-
+    for item in cart_items:
+        item.total_price = item.quantity * item.food_item.price
+    
     return render(request,'cart_view.html',{
         'cart_items':cart_items
     })
@@ -144,7 +146,9 @@ def fetch_add_cart_item(request, id):
         cart_item.quantity += 1
         cart_item.save()
 
-    return JsonResponse({'quantity': cart_item.quantity})
+    return JsonResponse({'quantity': cart_item.quantity,
+                         'name': food_item.name,
+                         'price': food_item.price,})
 
 
 def fetch_reduce_cart_item(request, id):
@@ -171,14 +175,56 @@ def fetch_reduce_cart_item(request, id):
 
     return JsonResponse({'error': 'Cart item not found'}, status=404)
 
+def place_order(request):
+    if not is_logged_in(request):
+        return redirect('/login_view')
+    user = User.objects.get(id=request.session.get('user_id'))
+    cart = Cart.objects.get(user=user)
+    cart_items = CartItem.objects.filter(cart=cart)
+
+    if not cart_items.exists():
+        return redirect('cart_view')
+
+    order = Order.objects.create(user=user, total_price=0)
+
+    total = 0
+
+    for item in cart_items:
+        OrderItem.objects.create(
+            order=order,
+            food_item=item.food_item,
+            quantity=item.quantity
+        )
+        total += item.quantity * item.food_item.price
+
+    order.total_price = total
+    order.save()
+
+    cart_items.delete()
+
+    return redirect('/order_summary/4')
+
+
+def order_summary(request, order_id):
+    if not is_logged_in(request):
+        return redirect('/login_view')
+    
+    order = Order.objects.get(id=order_id)
+    order_items = OrderItem.objects.filter(order=order).select_related('food_item')
+
+    return render(request, 'order_summary.html', {
+        'order': order,
+        'order_items': order_items
+    })
 
 
 def user_order(request):
     if not is_logged_in(request):
         return redirect('/login_view')
     
-
-    return render(request,'user_order.html')
+    orders = Order.objects.filter(user_id=request.session.get('user_id'), status__in=['pending', 'preparing','out for delivery'])
+    orderItem = OrderItem.objects.filter(order__in=orders).select_related('food_item')
+    return render(request,'user_order.html', {'orders': orders, 'orderItems': orderItem})
 
 
 def user_order_history(request):
